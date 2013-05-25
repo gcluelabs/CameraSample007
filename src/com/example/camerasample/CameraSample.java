@@ -1,4 +1,4 @@
-package com.gclue.CameraSample;
+package com.example.camerasample;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -54,22 +54,12 @@ public class CameraSample extends Activity implements SensorEventListener,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Notification Bar‚ğÁ‚·
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-		// Title Bar‚ğÁ‚·
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-		// SensorManager
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-
-		// LocationManager‚ÅGPS‚Ì’l‚ğæ“¾‚·‚é‚½‚ß‚Ìİ’è
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		// ’l‚ª•Ï‰»‚µ‚½Û‚ÉŒÄ‚Ño‚³‚ê‚éƒŠƒXƒi[‚Ì’Ç‰Á
 		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				0, 0, this);
-
-		// Sensor‚Ìæ“¾‚ÆƒŠƒXƒi[‚Ö‚Ì“o˜^
 		List<Sensor> sensors = mSensorManager
 				.getSensorList(Sensor.TYPE_ORIENTATION);
 		if (sensors.size() > 0) {
@@ -90,17 +80,11 @@ public class CameraSample extends Activity implements SensorEventListener,
 
 	@Override
 	public void onAccuracyChanged(Sensor arg0, int arg1) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onSensorChanged(SensorEvent sensorEvent) {
-		// Log.i("SURFACE", "SensorChanged()");
 		if (sensorEvent.sensor.getType() == Sensor.TYPE_ORIENTATION) {
-			// Log.i("SURFACE", "yaw:" + sensorEvent.values[0]);
-			// Log.i("SURFACE", "picth:" + sensorEvent.values[1]);
-			// Log.i("SURFACE", "roll:" + sensorEvent.values[2]);
 			mView.setOrientation("" + sensorEvent.values[0], ""
 					+ sensorEvent.values[1], "" + sensorEvent.values[2]);
 		}
@@ -108,12 +92,7 @@ public class CameraSample extends Activity implements SensorEventListener,
 
 	@Override
 	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
-		Log.i("GPS", "lat=" + location.getLatitude());
-		Log.i("GPS", "lon=" + location.getLongitude());
 		mView.setGps("" + location.getLatitude(), "" + location.getLongitude());
-
-		// Œ´”­À•W
 		Location genpatsuLocation = new Location("genpatsu");
 		genpatsuLocation.setLatitude(37.428524);
 		genpatsuLocation.setLongitude(141.032867);
@@ -127,20 +106,14 @@ public class CameraSample extends Activity implements SensorEventListener,
 
 	@Override
 	public void onProviderDisabled(String arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onProviderEnabled(String arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void onDestroy() {
@@ -158,14 +131,8 @@ public class CameraSample extends Activity implements SensorEventListener,
  * CameraView
  */
 class CameraView extends SurfaceView implements SurfaceHolder.Callback {
-	/**
-	 * Camera‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğŠi”[‚·‚é•Ï”
-	 */
 	private Camera mCamera;
 
-	/**
-	 * MyView‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğŠi”[‚·‚é•Ï”
-	 */
 	private View mView;
 	private boolean mInProgress;
 
@@ -175,25 +142,13 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 	}
 
-	/**
-	 * MyView‚ğó‚¯“n‚·
-	 * 
-	 * @param mView
-	 *            MyView
-	 */
 	public void setView(View mView) {
 		this.mView = mView;
 	}
 
-	/**
-	 * Surface‚É•Ï‰»‚ª‚ ‚Á‚½ê‡‚ÉŒÄ‚Î‚ê‚é
-	 */
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		Log.i("CAMERA", "surfaceChaged");
-
-		// ‰æ–Êİ’è
 		Camera.Parameters parameters = mCamera.getParameters();
 		List<Size> params = parameters.getSupportedPictureSizes();
 		int wid = params.get(0).width;
@@ -217,18 +172,11 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		parameters.setPreviewSize(wid2, hei2);
 		mCamera.setParameters(parameters);
 
-		// ƒvƒŒƒrƒ…[•\¦‚ğŠJn
 		mCamera.startPreview();
 	}
 
-	/**
-	 * Surface‚ª¶¬‚³‚ê‚½Û‚ÉŒÄ‚Î‚ê‚é
-	 */
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		Log.i("CAMERA", "surfaceCreated");
-
-		// ƒJƒƒ‰‚ğOpen
 		mCamera = Camera.open();
 		try {
 			mCamera.setPreviewDisplay(holder);
@@ -236,14 +184,10 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	/**
-	 * Surface‚ª”jŠü‚³‚ê‚½ê‡‚ÉŒÄ‚Î‚ê‚é
-	 */
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.i("CAMERA", "surfaceDestroyed");
 
-		// ƒJƒƒ‰‚ğClose
 		mCamera.stopPreview();
 		mCamera.release();
 		mCamera = null;
@@ -265,35 +209,25 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 			}, null, new Camera.PictureCallback() {
 				@Override
 				public void onPictureTaken(byte[] data, Camera camera) {
-					Log.i("DEBUG", "onTouch");
-
-					// ƒvƒŒƒrƒ…[B‰e‚ğ—LŒø‚É‚·‚é
 					mView.setDrawingCacheEnabled(true);
 					Bitmap viewBitmap = Bitmap.createBitmap(mView
 							.getDrawingCache());
-					// ƒvƒŒƒrƒ…[B‰e‚ğ–³Œø‚É‚·‚é
 					mView.setDrawingCacheEnabled(false);
 
-					// ƒXƒP[ƒ‹‚ğæ“¾
 					int scale = getScale(data, viewBitmap.getWidth(),
 							viewBitmap.getHeight());
 
-					// Bitmap¶¬‚ÌƒIƒvƒVƒ‡ƒ“‚ğì¬
 					BitmapFactory.Options options = new BitmapFactory.Options();
 					options.inSampleSize = scale;
 
-					// ƒJƒƒ‰‰æ‘œ‚©‚çƒXƒP[ƒ‹‚Ì’l‚ğİ’è‚µ‚½ó‘Ô‚ÅƒJƒƒ‰‰æ‘œ‚ğBitmapŒ`®‚ÅŠi”[
 					Bitmap myBitmap = BitmapFactory.decodeByteArray(data, 0,
 							data.length, options);
 
-					// æ“¾‚µ‚½‰æ‘œƒTƒCƒY‚É‚ ‚¤ƒTƒCƒY‚ÌBitmap‚ğì¬(‰½‚à•`‰æ‚³‚ê‚Ä‚¢‚È‚¢)
 					Bitmap tmpBitmap = Bitmap.createBitmap(myBitmap.getWidth(),
 							myBitmap.getHeight(), Bitmap.Config.ARGB_8888);
 
-					// tmpBitmap‚©‚çƒLƒƒƒ“ƒoƒX‚ğì¬
 					Canvas canvas = new Canvas(tmpBitmap);
 
-					// ì¬‚µ‚½Canvas‚ÉMyView‚ÌƒvƒŒƒrƒ…[‚ÆƒJƒƒ‰‚Ì‰æ‘œ‚ğ‚Í‚è‚Â‚¯‡¬
 					canvas.drawBitmap(
 							myBitmap,
 							null,
@@ -302,11 +236,8 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 					canvas.drawBitmap(viewBitmap, null, new Rect(0, 0,
 							viewBitmap.getWidth(), viewBitmap.getHeight()),
 							null);
-
-					// sdƒJ[ƒh‚É•Û‘¶
 					saveBitmapToSd(tmpBitmap);
 
-					// ƒvƒŒƒrƒ…[•\¦‚ğÄŠJ
 					mCamera.startPreview();
 
 				}
@@ -318,17 +249,6 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		return false;
 	}
 
-	/**
-	 * ƒXƒP[ƒ‹‚ğæ“¾‚·‚é
-	 * 
-	 * @param data
-	 *            kÚ‚ğ’²¸‚·‚é‰æ‘œƒf[ƒ^
-	 * @param width
-	 *            •ÏX‚·‚é‰¡‚ÌƒTƒCƒY
-	 * @param height
-	 *            •ÏX‚·‚éc‚ÌƒTƒCƒY
-	 * @return •ÏX‚µ‚½‚¢ƒTƒCƒY‚ÌƒXƒP[ƒ‹‚Ì’l
-	 */
 	public int getScale(byte[] data, int width, int height) {
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
@@ -343,31 +263,20 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		return scale;
 	}
 
-	/**
-	 * Bitmap‰æ‘œ‚ğsdƒJ[ƒh‚É•Û‘¶
-	 * 
-	 * @param mBitmap
-	 *            Bitmapƒf[ƒ^
-	 */
 	public void saveBitmapToSd(Bitmap mBitmap) {
 		try {
-			// sdcardƒtƒHƒ‹ƒ_‚ğw’è
 			File root = new File(Environment.getExternalStorageDirectory()
 					.getPath() + "/DCIM/");
 
-			// “ú•t‚Åƒtƒ@ƒCƒ‹–¼‚ğì¬@
 			Date mDate = new Date();
 			SimpleDateFormat fileName = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
-			// •Û‘¶ˆ—ŠJn
 			FileOutputStream fos = null;
 			fos = new FileOutputStream(new File(root, fileName.format(mDate)
 					+ ".jpg"));
 
-			// jpeg‚Å•Û‘¶
 			mBitmap.compress(CompressFormat.JPEG, 100, fos);
 
-			// •Û‘¶ˆ—I—¹
 			fos.close();
 		} catch (Exception e) {
 			Log.e("Error", "" + e.toString());
@@ -376,68 +285,30 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 }
 
-/**
- * ƒI[ƒo[ƒŒƒC•`‰æ—p‚ÌƒNƒ‰ƒX
- */
 class MyView extends View {
 
-	/**
-	 * xÀ•W
-	 */
 	private int x;
 
-	/**
-	 * yÀ•W
-	 */
 	private int y;
 
-	/**
-	 * Roll
-	 */
 	private String roll;
 
-	/**
-	 * Yaw
-	 */
 	private String yaw;
 
-	/**
-	 * Pitch
-	 */
 	private String pitch;
 
-	/**
-	 * Lat
-	 */
 	private String lat;
 
-	/**
-	 * Lon
-	 */
 	private String lon;
 
-	/**
-	 * distance
-	 */
 	private String distance;
 
-	/**
-	 * direction
-	 */
 	private String direction;
 
-	/**
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * 
-	 * @param context
-	 */
 	public MyView(Context context) {
 		super(context);
 	}
 
-	/**
-	 * ’l‚ğ“n‚·
-	 */
 	public void setOrientation(String yaw, String pitch, String roll) {
 		this.yaw = yaw;
 		this.pitch = pitch;
@@ -445,46 +316,31 @@ class MyView extends View {
 		invalidate();
 	}
 
-	/**
-	 * ’l‚ğ“n‚·(GPS)
-	 */
 	public void setGps(String lat, String lon) {
 		this.lat = lat;
 		this.lon = lon;
 		invalidate();
 	}
 
-	/**
-	 * ’l‚ğ“n‚·(Distance)
-	 */
 	public void setDistance(String distance) {
 		this.distance = distance;
 		invalidate();
 	}
 
-	/**
-	 * ’l‚ğ“n‚·(Direction)
-	 */
 	public void setDirection(String direction) {
 		this.direction = direction;
 		invalidate();
 	}
 
-	/**
-	 * •`‰æˆ—
-	 */
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		// ”wŒiF‚ğİ’è
 		canvas.drawColor(Color.TRANSPARENT);
 
-		// •`‰æ‚·‚é‚½‚ß‚Ìü‚ÌF‚ğİ’è
 		Paint mainPaint = new Paint();
 		mainPaint.setStyle(Paint.Style.FILL);
 		mainPaint.setARGB(255, 255, 255, 100);
 
-		// •¶š‚ğ•`‰æ
 		canvas.drawText("" + yaw, 10, 10, mainPaint);
 		canvas.drawText("" + roll, 10, 30, mainPaint);
 		canvas.drawText("" + pitch, 10, 50, mainPaint);
@@ -492,8 +348,8 @@ class MyView extends View {
 		canvas.drawText("" + lat, 10, 100, mainPaint);
 		canvas.drawText("" + lon, 10, 120, mainPaint);
 
-		canvas.drawText("‹——£:" + distance, 10, 160, mainPaint);
-		canvas.drawText("•ûŠp:" + direction, 10, 180, mainPaint);
+		canvas.drawText("ï¿½ï¿½ï¿½ï¿½:" + distance, 10, 160, mainPaint);
+		canvas.drawText("ï¿½ï¿½p:" + direction, 10, 180, mainPaint);
 	}
 
 }
